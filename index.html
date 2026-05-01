@@ -212,11 +212,12 @@
     const errorCount = document.getElementById('errorCount');
     const errorStat = document.getElementById('errorStat');
     const loadingBar = document.getElementById('loadingBar');
-    const langBtns = document.querySelectorAll('.lang-toggle .lang-btn:not(#themeBtn)');
 
     let selectedLang = 'auto';
     let currentText = '';
 
+    // --- Language toggle ---
+    const langBtns = document.querySelectorAll('.lang-toggle .lang-btn[data-lang]');
     langBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         langBtns.forEach(b => b.classList.remove('active'));
