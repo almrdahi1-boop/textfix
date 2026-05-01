@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TextFix - تدقيق إملائي ونحوي مجاني | Free Spelling & Grammar Checker</title>
+  <meta name="description" content="TextFix: أداة مجانية للتدقيق الإملائي والنحوي. صحح نصوصك العربية والإنجليزية بسرعة. Free online spelling & grammar checker for Arabic and English.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --error-text: #dc2626;
+      --success: #16a34a;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; display: flex; flex-direction: column;
+    }
+    header {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .logo { font-size: 24px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+    .logo span { font-size: 14px; font-weight: 400; color: var(--text-muted); }
+    .lang-toggle { display: flex; gap: 6px; background: var(--bg); border-radius: 8px; padding: 3px; }
+    .lang-btn {
+      border: none; background: transparent; padding: 6px 14px; border-radius: 6px;
+      cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-muted); transition: all 0.15s;
+    }
+    .lang-btn.active { background: var(--primary); color: white; }
+    main { max-width: 900px; margin: 0 auto; padding: 32px 20px; flex: 1; width: 100%; }
+    .hero { text-align: center; margin-bottom: 24px; }
+    .hero h1 { font-size: 28px; margin-bottom: 8px; }
+    .hero p { color: var(--text-muted); font-size: 16px; }
+    .stats-bar { display: flex; gap: 24px; justify-content: center; margin-bottom: 20px; font-size: 14px; color: var(--text-muted); flex-wrap: wrap; }
+    .stats-bar span { display: flex; align-items: center; gap: 4px; }
+    .editor-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+    }
+    .editor-toolbar {
+      display: flex; gap: 8px; padding: 12px 16px;
+      border-bottom: 1px solid var(--border); background: var(--bg); flex-wrap: wrap;
+    }
+    .toolbar-btn {
+      border: 1px solid var(--border); background: var(--card);
+      padding: 8px 18px; border-radius: 6px; cursor: pointer;
+      font-size: 14px; color: var(--text); transition: all 0.15s;
+    }
+    .toolbar-btn:active { transform: scale(0.96); }
+    .toolbar-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .toolbar-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+    .toolbar-btn.primary:hover { background: var(--primary-dark); }
+    .toolbar-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .editor-wrapper { position: relative; }
+    .editor-textarea {
+      width: 100%; min-height: 280px; padding: 20px; border: none;
+      font-size: 16px; line-height: 1.8; resize: vertical;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      color: var(--text); background: transparent;
+      position: relative; z-index: 2;
+    }
+    .editor-textarea:focus { outline: none; }
+    .editor-textarea::placeholder { color: #94a3b8; }
+    .results-panel {
+      display: none; margin-top: 16px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px;
+    }
+    .results-panel.visible { display: block; }
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .results-title { font-size: 18px; font-weight: 600; }
+    .results-count { font-size: 14px; color: var(--text-muted); }
+    .results-list { display: flex; flex-direction: column; gap: 10px; }
+    .result-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px; border-radius: 8px; background: var(--bg);
+      border-right: 3px solid var(--error-text);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .result-item .icon { font-size: 18px; flex-shrink: 0; }
+    .result-item .msg { flex: 1; font-size: 14px; }
+    .result-item .msg strong { display: block; margin-bottom: 2px; }
+    .result-item .msg .old-text { color: var(--error-text); text-decoration: line-through; }
+    .result-item .msg .new-text { color: var(--success); font-weight: 600; }
+    .result-item .context { font-size: 12px; color: var(--text-muted); margin-top: 4px; opacity: 0.7; }
+    .result-item .context em { background: #fef3c7; padding: 0 2px; font-style: normal; }
+    .loading-bar { display: none; height: 3px; background: linear-gradient(90deg, var(--primary), #818cf8); animation: loading 1s infinite; }
+    @keyframes loading { 0% { width: 0; } 50% { width: 50%; } 100% { width: 100%; } }
+    .loading-bar.visible { display: block; }
+    footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); margin-top: 40px; }
+    .ad-space { margin: 24px 0; min-height: 100px; background: var(--bg); border: 1px dashed var(--border); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px; }
+    /* 📱 Mobile responsive - comprehensive */
+    @media (max-width: 768px) {
+      header { flex-direction: column; text-align: center; gap: 8px; }
+      .hero h1 { font-size: 22px; }
+      .hero p { font-size: 14px; }
+      .stats-bar { gap: 12px; font-size: 13px; }
+      .editor-toolbar { justify-content: center; }
+      .editor-textarea { min-height: 220px; padding: 14px; font-size: 15px; }
+      main { padding: 20px 14px; }
+      .lang-btn { padding: 5px 10px; font-size: 13px; }
+      .toolbar-btn { padding: 7px 14px; font-size: 13px; }
+      .result-item { padding: 10px; flex-wrap: wrap; }
+      .result-item .context { font-size: 11px; }
+      .word-hint { font-size: 11px; }
+    }
+    @media (max-width: 400px) {
+      .editor-textarea { min-height: 180px; font-size: 14px; padding: 12px; }
+      .hero h1 { font-size: 18px; }
+      .logo { font-size: 20px; }
+      .lang-toggle { gap: 4px; }
+      .lang-btn { padding: 4px 8px; font-size: 12px; }
+      .toolbar-btn { padding: 6px 12px; font-size: 12px; }
+      .results-panel { padding: 14px; }
+    }
+    /* Landscape mobile = compact view, more editor space */
+    @media (max-height: 500px) and (orientation: landscape) {
+      header { padding: 8px 16px; }
+      .hero { display: none; }
+      .stats-bar { margin-bottom: 8px; }
+      .editor-textarea { min-height: 140px; }
+      main { padding: 10px 12px; }
+      .ad-space { min-height: 0; max-height: 60px; }
+    }
+    .word-hint { text-align: center; padding: 8px; font-size: 12px; color: var(--text-muted); }
+
+    /* Dark mode — applied via .dark on body */
+    body.dark {
+      --primary: #60a5fa;
+      --primary-dark: #3b82f6;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    body.dark .error-mark { background: #7f1d1d; }
+    body.dark .result-item { background: #1e293b; }
+    body.dark .result-item .context em { background: #3b2200; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">✏️ TextFix <span>تدقيق مجاني</span></div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="auto">🌐 تلقائي</button>
+      <button class="lang-btn" id="themeBtn">🌙</button>
+      <button class="lang-btn" data-lang="ar">🇸🇦 العربية</button>
+      <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>📝 صحّح نصوصك في ثوانٍ</h1>
+      <p>تدقيق إملائي ونحوي مجاني — عربي وإنجليزي</p>
+    </section>
+    <div class="stats-bar" id="stats">
+      <span>📝 <strong id="wordCount">0</strong> كلمة</span>
+      <span>🔤 <strong id="charCount">0</strong> حرف</span>
+      <span id="errorStat" style="display:none">⚠️ <strong id="errorCount">0</strong> خطأ</span>
+    </div>
+    <div class="editor-card">
+      <div class="editor-toolbar">
+        <button class="toolbar-btn primary" id="checkBtn">🔍 تدقيق</button>
+        <button class="toolbar-btn" id="clearBtn">🗑️ مسح</button>
+        <button class="toolbar-btn" id="pasteBtn">📋 لصق</button>
+      </div>
+      <div class="editor-wrapper">
+        <textarea class="editor-textarea" id="textInput" dir="auto"
+          placeholder="اكتب أو الصق نصك هنا..."
+          spellcheck="false"></textarea>
+      </div>
+      <div class="loading-bar" id="loadingBar"></div>
+    </div>
+    <div class="word-hint">💡 اختصار: Ctrl+Enter للتدقيق السريع</div>
+    <div class="ad-space"><!-- إعلانات AdSense هنا مستقبلًا --></div>
+    <div class="results-panel" id="resultsPanel">
+      <div class="results-header">
+        <span class="results-title" id="resultsTitle">نتائج التدقيق</span>
+        <span class="results-count" id="resultsCount"></span>
+      </div>
+      <div class="results-list" id="resultsList"></div>
+    </div>
+  </main>
+  <footer>
+    <p>TextFix &copy; 2026 — <a href="#">سياسة الخصوصية</a> | <a href="#">تواصل معنا</a></p>
+  </footer>
+
+  <script>
+    const textInput = document.getElementById('textInput');
+    const checkBtn = document.getElementById('checkBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const pasteBtn = document.getElementById('pasteBtn');
+    const resultsPanel = document.getElementById('resultsPanel');
+    const resultsList = document.getElementById('resultsList');
+    const resultsCount = document.getElementById('resultsCount');
+    const resultsTitle = document.getElementById('resultsTitle');
+    const wordCount = document.getElementById('wordCount');
+    const charCount = document.getElementById('charCount');
+    const errorCount = document.getElementById('errorCount');
+    const errorStat = document.getElementById('errorStat');
+    const loadingBar = document.getElementById('loadingBar');
+    const langBtns = document.querySelectorAll('.lang-toggle .lang-btn:not(#themeBtn)');
+
+    let selectedLang = 'auto';
+    let currentText = '';
+
+    langBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        langBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedLang = btn.dataset.lang;
+      });
+    });
+
+    function updateStats(text, errorNum) {
+      const t = text || textInput.value;
+      const words = t.trim() ? t.trim().split(/\s+/).length : 0;
+      wordCount.textContent = words;
+      charCount.textContent = t.length;
+      if (errorNum !== undefined) {
+        errorCount.textContent = errorNum;
+        errorStat.style.display = errorNum > 0 ? 'inline' : 'none';
+      } else {
+        errorStat.style.display = 'none';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function detectLang(text) {
+      return /[\u0600-\u06FF]/.test(text) ? 'ar' : 'en-US';
+    }
+
+    async function checkText() {
+      const text = textInput.value.trim();
+      if (!text) { resultsPanel.classList.remove('visible'); return; }
+
+      currentText = text;
+      checkBtn.disabled = true;
+      checkBtn.textContent = '⏳...';
+      loadingBar.classList.add('visible');
+      resultsPanel.classList.remove('visible');
+
+      try {
+        const lang = selectedLang === 'auto' ? detectLang(text) : selectedLang;
+        const params = new URLSearchParams({ text, language: lang, enabledOnly: 'false' });
+        const res = await fetch('https://api.languagetool.org/v2/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString()
+        });
+        const data = await res.json();
+        const matches = data.matches || [];
+
+        resultsPanel.classList.add('visible');
+        updateStats(text, matches.length);
+
+        if (matches.length === 0) {
+          resultsTitle.textContent = '✅ ✅ ✅';
+          resultsCount.textContent = 'لا توجد أخطاء';
+          resultsList.innerHTML = '<div style="padding:20px;text-align:center;color:var(--success);font-size:18px;font-weight:600;">🎉 نص سليم تمامًا!</div>';
+          return;
+        }
+
+        resultsTitle.textContent = '✏️ نتائج التدقيق';
+        resultsCount.textContent = `${matches.length} خطأ`;
+
+        // Build results HTML
+        let html = '';
+        const sortedMatches = [...matches].sort((a, b) => {
+          const oa = a.context ? a.context.offset : a.offset || 0;
+          const ob = b.context ? b.context.offset : b.offset || 0;
+          return oa - ob;
+        });
+
+        for (const m of sortedMatches) {
+          const ctx = m.context || {};
+          const ctxText = ctx.text || '';
+          const offset = ctx.offset || 0;
+          const length = ctx.length || 0;
+
+          const msg = m.message || 'خطأ إملائي';
+          const replacements = (m.replacements || []).slice(0, 3);
+          const oldPart = ctxText.slice(offset, offset + length);
+
+          // Build context with highlight
+          const beforeCtx = escapeHtml(ctxText.slice(Math.max(0, offset - 30), offset));
+          const highlightPart = `<em>${escapeHtml(oldPart)}</em>`;
+          const afterCtx = escapeHtml(ctxText.slice(offset + length, Math.min(ctxText.length, offset + length + 30)));
+
+          const replHtml = replacements.length > 0
+            ? `<span class="new-text">← ${replacements.map(r => escapeHtml(r.value)).join(' | ')}</span>`
+            : '';
+
+          html += `<div class="result-item">
+            <span class="icon">✏️</span>
+            <div class="msg">
+              <strong>${escapeHtml(msg)}</strong>
+              <span class="old-text">${escapeHtml(oldPart)}</span> ${replHtml}
+              <div class="context">${beforeCtx}${highlightPart}${afterCtx}</div>
+            </div>
+          </div>`;
+        }
+
+        resultsList.innerHTML = html;
+      } catch (err) {
+        resultsPanel.classList.add('visible');
+        resultsTitle.textContent = '⚠️ خطأ';
+        resultsCount.textContent = '';
+        resultsList.innerHTML = '<div style="padding:20px;text-align:center;color:var(--error-text);">فشل الاتصال. تحقق من اتصالك بالإنترنت وحاول مرة أخرى.</div>';
+      } finally {
+        checkBtn.disabled = false;
+        checkBtn.textContent = '🔍 تدقيق';
+        loadingBar.classList.remove('visible');
+      }
+    }
+
+    checkBtn.addEventListener('click', checkText);
+
+    clearBtn.addEventListener('click', () => {
+      textInput.value = '';
+      resultsPanel.classList.remove('visible');
+      updateStats('', 0);
+      textInput.focus();
+    });
+
+    pasteBtn.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        textInput.value = text;
+        resultsPanel.classList.remove('visible');
+        updateStats(text, 0);
+      } catch { alert('تعذر الوصول للحافظة. استخدم Ctrl+V / ⌘V.'); }
+    });
+
+    textInput.addEventListener('input', () => {
+      updateStats(textInput.value, 0);
+      if (resultsPanel.classList.contains('visible')) resultsPanel.classList.remove('visible');
+    });
+
+    // Auto dir for Arabic/English input
+    textInput.addEventListener('input', () => {
+      if (/[؀-ۿ]/.test(textInput.value)) {
+        textInput.setAttribute('dir', 'rtl');
+        textInput.style.textAlign = 'right';
+      } else if (textInput.value.length > 0) {
+        textInput.setAttribute('dir', 'ltr');
+        textInput.style.textAlign = 'left';
+      }
+    });
+
+    textInput.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); checkText(); }
+    });
+
+    // ---------- Dark Mode ----------
+    const themeBtn = document.getElementById('themeBtn');
+    function setTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      themeBtn.textContent = dark ? '☀️' : '🌙';
+      localStorage.setItem('textfix-theme', dark ? 'dark' : 'light');
+    }
+    // Check saved preference or system preference
+    const savedTheme = localStorage.getItem('textfix-theme');
+    if (savedTheme) {
+      setTheme(savedTheme === 'dark');
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme(true);
+    }
+    themeBtn.addEventListener('click', () => {
+      setTheme(!document.body.classList.contains('dark'));
+    });
+
+    updateStats('', 0);
+  </script>
+</body>
+</html>
