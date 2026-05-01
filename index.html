@@ -164,24 +164,25 @@
     if(!text){pan.classList.remove('show');return}
     go.disabled=true;go.textContent='⏳...';lb.classList.add('show');pan.classList.remove('show');
     try{
-      // استخدم OpenRouter مع Gemini عبر API مجاني
-      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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',
-          'HTTP-Referer': 'https://almrdahi1-boop.github.io/textfix/',
-          'X-Title': 'TextFix'
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-001',
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            { role: 'user', content: text }
-          ],
+      // استخدم Gemini API مباشرة
+      const GEMINI_KEY = 'AIzaSyBqMkvMpXlENB5r5H9nfq0isCbMFOeoxS0';
+      const geminiBody = {
+        contents: [
+          { role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\n---\n\n' + text }] }
+        ],
+        generationConfig: {
           temperature: 0.2,
-          max_tokens: 8192
-        })
+          topP: 0.9,
+          topK: 40,
+          maxOutputTokens: 8192,
+          responseMimeType: 'application/json'
+        }
+      };
+
+      const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_KEY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(geminiBody)
       });
 
       if (!res.ok) {
@@ -190,7 +191,7 @@
       }
 
       const data = await res.json();
-      const raw = data?.choices?.[0]?.message?.content || '';
+      const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
       
       // استخراج JSON من الرد
       let jsonStr = raw.trim();
