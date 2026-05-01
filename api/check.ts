@@ -49,7 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const isArabic = /[\u0600-\u06FF]/.test(text);
   const sysPrompt = isArabic ? SYSTEM_PROMPT_AR : SYSTEM_PROMPT_EN;
 
-  const apiKey = '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';
+  const apiKey = process.env.GROQ_KEY;
 
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
