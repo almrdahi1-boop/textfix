@@ -92,7 +92,35 @@
   const wds=document.getElementById('wds'),chs=document.getElementById('chs');
   const ers=document.getElementById('errs'),eS=document.getElementById('errStat');
   const lb=document.getElementById('loadBar'),tb=document.getElementById('themeBtn');
-  let lang='auto';
+  let lang='ar';
+
+  // SYSTEM PROMPT للذكاء الاصطناعي
+  const SYSTEM_PROMPT = `أنت خبير تدقيق لغوي متخصص في اللغة العربية والإنجليزية. دورك تصحيح النصوص بدقة.
+
+مهامك:
+1. **التدقيق الإملائي والنحوي الشامل**: صحح الأخطاء الإملائية والنحوية. ركز على قواعد النحو العربي (الإعراب، علامات الرفع والنصب والجر، الأخطاء الشائعة).
+2. **إعادة صياغة منظمة**: أعد كتابة النص المصحح بطريقة مرتبة مع علامات الترقيم الصحيحة، الأحرف الكبيرة في بداية الجمل (للإنجليزية)، تنظيم الفقرات.
+3. **شرح التصحيحات**: اشرح ما الذي تم تصحيحه.
+
+**تنسيق الرد**: أعد JSON بهذه الصيغة بالضبط:
+{
+  "corrected": "النص الكامل بعد التصحيح وإعادة الصياغة",
+  "summary": "ملخص التغييرات (جملة أو جملتين)",
+  "fixes": [
+    {
+      "original": "الكلمة أو العبارة قبل التصحيح",
+      "corrected": "بعد التصحيح",
+      "explanation": "شرح الخطأ"
+    }
+  ],
+  "wordCount": عدد الكلمات,
+  "charCount": عدد الأحرف
+}
+
+مهم جداً:
+- لا تقم بتعديل الأرقام أو الأسماء أو التواريخ أو الروابط
+- حافظ على المعنى الأصلي للنص
+- أعد الرد بصيغة JSON صالحة فقط`;
 
   // Lang toggles
   document.querySelectorAll('.tool-btn[data-lang]').forEach(b=>{
@@ -106,27 +134,17 @@
 
   function updateLang(l){
     const heroH=document.querySelector('.hero h1'),heroP=document.querySelector('.hero p');
-    if(l==='en'){
-      heroH.textContent='📝 Fix Your Text in Seconds';
-      heroP.textContent='Free spelling & grammar checker — Arabic & English';
-      document.querySelector('.logo span').textContent='Free Check';
-      document.querySelector('.hint').textContent='💡 Ctrl+Enter for quick check';
-      goBtn.textContent='🔍 Check';
-      clrBtn.textContent='🗑️ Clear';
-      pstBtn.textContent='📋 Paste';
-      document.querySelector('.stats span:nth-child(1)').innerHTML='📝 <strong id="wds">0</strong> words';
-      document.querySelector('.stats span:nth-child(2)').innerHTML='🔤 <strong id="chs">0</strong> chars';
-    } else {
-      heroH.textContent='📝 صحّح نصوصك في ثوانٍ';
-      heroP.textContent='تدقيق إملائي ونحوي مجاني — عربي وإنجليزي';
-      document.querySelector('.logo span').textContent='تدقيق مجاني';
-      document.querySelector('.hint').textContent='💡 Ctrl+Enter للتدقيق السريع';
-      goBtn.textContent='🔍 تدقيق';
-      clrBtn.textContent='🗑️ مسح';
-      pstBtn.textContent='📋 لصق';
-      document.querySelector('.stats span:nth-child(1)').innerHTML='📝 <strong id="wds">0</strong> كلمة';
-      document.querySelector('.stats span:nth-child(2)').innerHTML='🔤 <strong id="chs">0</strong> حرف';
-    }
+    const isEn=l==='en';
+    heroH.textContent=isEn?'📝 Fix Your Text in Seconds':'📝 صحّح نصوصك في ثوانٍ';
+    heroP.textContent=isEn?'Free spelling & grammar checker — Arabic & English':'تدقيق إملائي ونحوي مجاني — عربي وإنجليزي';
+    document.querySelector('.logo span').textContent=isEn?'Free Check':'تدقيق مجاني';
+    document.querySelector('.hint').textContent=isEn?'💡 Ctrl+Enter for quick check':'💡 Ctrl+Enter للتدقيق السريع';
+    go.textContent=isEn?'🔍 Check':'🔍 تدقيق';
+    clr.textContent=isEn?'🗑️ Clear':'🗑️ مسح';
+    pst.textContent=isEn?'📋 Paste':'📋 لصق';
+
+    document.querySelector('.stats span:nth-child(1)').innerHTML=isEn?'📝 <strong id="wds">0</strong> words':'📝 <strong id="wds">0</strong> كلمة';
+    document.querySelector('.stats span:nth-child(2)').innerHTML=isEn?'🔤 <strong id="chs">0</strong> chars':'🔤 <strong id="chs">0</strong> حرف';
     wds=document.getElementById('wds');
     chs=document.getElementById('chs');
   }
@@ -146,27 +164,110 @@
     if(!text){pan.classList.remove('show');return}
     go.disabled=true;go.textContent='⏳...';lb.classList.add('show');pan.classList.remove('show');
     try{
-      const l=lang==='auto'?(/[؀-ۿ]/.test(text)?'ar':'en-US'):lang;
-      const params=new URLSearchParams({text,language:l,enabledOnly:'false'});
-      const r=await fetch('https://api.languagetool.org/v2/check',{
-        method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params.toString()
+      // استخدم OpenRouter مع Gemini عبر API مجاني
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer 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',
+          'HTTP-Referer': 'https://almrdahi1-boop.github.io/textfix/',
+          'X-Title': 'TextFix'
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.0-flash-001',
+          messages: [
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: text }
+          ],
+          temperature: 0.2,
+          max_tokens: 8192
+        })
       });
-      const d=await r.json(),m=d.matches||[];
-      pan.classList.add('show');stats(text,m.length);
-      if(!m.length){pT.textContent='✅ ✅ ✅';pC.textContent='لا توجد أخطاء';pL.innerHTML='<div style="padding:20px;text-align:center;color:var(--success);font-size:18px;font-weight:600;">🎉 نص سليم تمامًا!</div>';return}
-      pT.textContent='✏️ نتائج التدقيق';pC.textContent=m.length+' خطأ';
-      let html='';
-      m.sort((a,b)=>(a.context?.offset||0)-(b.context?.offset||0));
-      for(const x of m){
-        const ctx=x.context||{},t=ctx.text||'',o=ctx.offset||0,len=ctx.length||0;
-        const msg=x.message||'خطأ إملائي',repl=(x.replacements||[]).slice(0,3),old=t.slice(o,o+len);
-        const b4=esc(t.slice(Math.max(0,o-30),o)),hl=`<em>${esc(old)}</em>`,af=esc(t.slice(o+len,Math.min(t.length,o+len+30)));
-        const rpl=repl.length?` <span class="new">← ${repl.map(r=>esc(r.value)).join(' | ')}</span>`:'';
-        html+=`<div class="item"><span>✏️</span><div class="msg"><b>${esc(msg)}</b><span class="old">${esc(old)}</span>${rpl}<div class="ctx">${b4}${hl}${af}</div></div></div>`;
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error('API error: ' + errText.slice(0, 200));
       }
-      pL.innerHTML=html;
-    }catch(e){pan.classList.add('show');pT.textContent='⚠️ خطأ';pC.textContent='';pL.innerHTML='<div style="padding:20px;text-align:center;color:var(--error-text);">فشل الاتصال. تحقق من اتصالك بالإنترنت.</div>'}
-    finally{go.disabled=false;go.textContent='🔍 تدقيق';lb.classList.remove('show')}
+
+      const data = await res.json();
+      const raw = data?.choices?.[0]?.message?.content || '';
+      
+      // استخراج JSON من الرد
+      let jsonStr = raw.trim();
+      if (jsonStr.startsWith('```')) {
+        jsonStr = jsonStr.replace(/```(?:json)?\n?/g, '').trim();
+      }
+      
+      let result;
+      try {
+        result = JSON.parse(jsonStr);
+      } catch {
+        // إذا فشل الـ JSON، نستخدم النص الخام
+        result = { corrected: raw, summary: 'تمت المعالجة', fixes: [], wordCount: 0, charCount: raw.length };
+      }
+      
+      pan.classList.add('show');
+      stats(text, result.fixes?.length || 0);
+      
+      const fixes = result.fixes || [];
+      const corrected = result.corrected || raw;
+      
+      // عرض النص المصحح
+      let correctedHtml = '<div style="background:var(--bg);border-radius:8px;padding:16px;margin-bottom:16px;border:2px solid var(--success);">';
+      correctedHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+      correctedHtml += '<span style="font-weight:600;color:var(--success);">✅ النص بعد التصحيح</span>';
+      correctedHtml += '<button class="btn" id="copyBtn" style="font-size:13px;padding:4px 12px;">📋 نسخ المصحح</button>';
+      correctedHtml += '</div>';
+      correctedHtml += '<div style="font-size:15px;line-height:1.8;white-space:pre-wrap;">' + esc(corrected) + '</div></div>';
+      
+      // الملخص
+      if (result.summary) {
+        correctedHtml += '<div style="padding:12px;background:var(--bg);border-radius:8px;margin-bottom:16px;">';
+        correctedHtml += '<span style="color:var(--text-muted);font-size:13px;">📌 ' + esc(result.summary) + '</span></div>';
+      }
+      
+      // قائمة التصحيحات
+      if (fixes.length > 0) {
+        correctedHtml += '<div style="margin-top:8px;"><h4 style="margin-bottom:12px;font-size:14px;color:var(--text-muted);">🔧 تفاصيل التصحيحات</h4>';
+        for (const f of fixes) {
+          correctedHtml += '<div class="item">';
+          correctedHtml += '<span>✏️</span>';
+          correctedHtml += '<div class="msg"><b>' + esc(f.explanation || 'تصحيح') + '</b>';
+          correctedHtml += '<span class="old">' + esc(f.original) + '</span>';
+          correctedHtml += ' <span class="new">← ' + esc(f.corrected) + '</span>';
+          correctedHtml += '</div></div>';
+        }
+      }
+      
+      pT.textContent = fixes.length > 0 ? '📝 نتائج التدقيق' : '✅ التدقيق كامل';
+      pC.textContent = fixes.length > 0 ? fixes.length + ' تصحيح' : 'نص سليم';
+      pL.innerHTML = correctedHtml;
+      
+      // ربط زر النسخ (يحتاج query بعد الإدراج)
+      const newCopyBtn = document.getElementById('copyBtn');
+      if (newCopyBtn) {
+        newCopyBtn.onclick = async function(){
+          try {
+            await navigator.clipboard.writeText(corrected);
+            newCopyBtn.textContent = '✅ تم النسخ';
+            setTimeout(() => { newCopyBtn.textContent = '📋 نسخ المصحح'; }, 2000);
+          } catch {
+            alert('اضغط Ctrl+C / ⌘C للنسخ');
+          }
+        };
+      }
+      
+    } catch(e) {
+      pan.classList.add('show');
+      pT.textContent = '⚠️ خطأ';
+      pC.textContent = '';
+      pL.innerHTML = '<div style="padding:20px;text-align:center;color:var(--error-text);">فشل الاتصال بالذكاء الاصطناعي. الرجاء المحاولة مرة أخرى.<br><small>' + esc(e.message) + '</small></div>';
+    }
+    finally{
+      go.disabled=false;
+      go.textContent='🔍 تدقيق';
+      lb.classList.remove('show');
+    }
   }
 
   go.onclick=check;
