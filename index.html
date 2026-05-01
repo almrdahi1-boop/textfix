@@ -94,14 +94,12 @@
   const lb=document.getElementById('loadBar'),tb=document.getElementById('themeBtn');
   let lang='auto';
 
-  // Lang toggles
+  // Lang toggles — only toggle .active, never overwrite button text
   document.querySelectorAll('.tool-btn[data-lang]').forEach(b=>{
     b.onclick=()=>{
       document.querySelectorAll('.tool-btn[data-lang]').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');lang=b.dataset.lang;
-      // Visual feedback: update subtitle
-      const labels={'auto':'🌐 تلقائي','ar':'🇸🇦 العربية','en':'🇬🇧 English'};
-      document.querySelector('.tool-btn[data-lang="'+lang+'"]').textContent=labels[lang];
+      b.classList.add('active');
+      lang=b.dataset.lang;
     }
   });
 
