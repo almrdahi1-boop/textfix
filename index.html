@@ -70,6 +70,12 @@
   <div class="card">
     <div class="actions">
       <button class="btn primary" id="goBtn">🔍 تدقيق</button>
+      <select id="capsSelect" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:14px;cursor:pointer">
+        <option value="0">بدون تغيير</option>
+        <option value="1">🔠 أحرف كبيرة</option>
+        <option value="2">👤 أول حرف من كل كلمة</option>
+        <option value="3">📖 أول حرف من كل جملة</option>
+      </select>
       <button class="btn" id="clrBtn">🗑️ مسح</button>
       <button class="btn" id="pstBtn">📋 لصق</button>
     </div>
@@ -106,7 +112,12 @@
 
   function updateLang(l){
     const heroH=document.querySelector('.hero h1'),heroP=document.querySelector('.hero p');
+    const capsSel=document.getElementById('capsSelect');
     const isEn=l==='en';
+    capsSel.options[0].text=isEn?'No Change':'بدون تغيير';
+    capsSel.options[1].text=isEn?'🔠 UPPERCASE':'🔠 أحرف كبيرة';
+    capsSel.options[2].text=isEn?'👤 Title Case':'👤 أول حرف من كل كلمة';
+    capsSel.options[3].text=isEn?'📖 Sentence case':'📖 أول حرف من كل جملة';
     heroH.textContent=isEn?'📝 Fix Your Text in Seconds':'📝 صحّح نصوصك في ثوانٍ';
     heroP.textContent=isEn?'Free spelling & grammar checker — Arabic & English':'تدقيق إملائي ونحوي مجاني — عربي وإنجليزي';
     document.querySelector('.logo span').textContent=isEn?'Free Check':'تدقيق مجاني';
@@ -136,11 +147,11 @@
     if(!text){pan.classList.remove('show');return}
     go.disabled=true;go.textContent='⏳...';lb.classList.add('show');pan.classList.remove('show');
     try{
-      // استخدم API الوسيط على Vercel
+      const capsMode = parseInt(document.getElementById('capsSelect').value);
       const res = await fetch('/api/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
+        body: JSON.stringify({ text, caps: capsMode })
       });
 
       if (!res.ok) {
@@ -157,57 +168,61 @@
       
       const fixes = result.fixes || [];
       const corrected = result.corrected || '';
+      const isEn=lang==='en';
       
-      // عرض النص المصحح
       let correctedHtml = '<div style="background:var(--bg);border-radius:8px;padding:16px;margin-bottom:16px;border:2px solid var(--success);">';
       correctedHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
-      correctedHtml += '<span style="font-weight:600;color:var(--success);">✅ النص بعد التصحيح</span>';
-      correctedHtml += '<button class="btn" id="copyBtn" style="font-size:13px;padding:4px 12px;">📋 نسخ المصحح</button>';
+      correctedHtml += '<span style="font-weight:600;color:var(--success);">' + (isEn?'✅ Corrected Text':'✅ النص بعد التصحيح') + '</span>';
+      correctedHtml += '<button class="btn" id="copyBtn" style="font-size:13px;padding:4px 12px;">' + (isEn?'📋 Copy corrected':'📋 نسخ المصحح') + '</button>';
       correctedHtml += '</div>';
       correctedHtml += '<div style="font-size:15px;line-height:1.8;white-space:pre-wrap;">' + esc(corrected) + '</div></div>';
       
-      // الملخص
       if (result.summary) {
         correctedHtml += '<div style="padding:12px;background:var(--bg);border-radius:8px;margin-bottom:16px;">';
         correctedHtml += '<span style="color:var(--text-muted);font-size:13px;">📌 ' + esc(result.summary) + '</span></div>';
       }
       
-      // قائمة التصحيحات
       if (fixes.length > 0) {
-        correctedHtml += '<div style="margin-top:8px;"><h4 style="margin-bottom:12px;font-size:14px;color:var(--text-muted);">🔧 تفاصيل التصحيحات</h4>';
+        correctedHtml += '<div style="margin-top:8px;"><h4 style="margin-bottom:12px;font-size:14px;color:var(--text-muted);">' + (isEn?'🔧 Fix Details':'🔧 تفاصيل التصحيحات') + '</h4>';
         for (const f of fixes) {
           correctedHtml += '<div class="item">';
           correctedHtml += '<span>✏️</span>';
-          correctedHtml += '<div class="msg"><b>' + esc(f.explanation || 'تصحيح') + '</b>';
+          correctedHtml += '<div class="msg"><b>' + esc(f.explanation || (isEn?'Fix':'تصحيح')) + '</b>';
           correctedHtml += '<span class="old">' + esc(f.original) + '</span>';
           correctedHtml += ' <span class="new">← ' + esc(f.corrected) + '</span>';
           correctedHtml += '</div></div>';
         }
       }
       
-      pT.textContent = fixes.length > 0 ? '📝 نتائج التدقيق' : '✅ التدقيق كامل';
-      pC.textContent = fixes.length > 0 ? fixes.length + ' تصحيح' : 'نص سليم';
+      pT.textContent = isEn
+        ? (fixes.length > 0 ? '📝 Check Results' : '✅ All Good')
+        : (fixes.length > 0 ? '📝 نتائج التدقيق' : '✅ التدقيق كامل');
+      pC.textContent = isEn
+        ? (fixes.length > 0 ? fixes.length + ' fix' + (fixes.length>1?'es':'') : 'Clean text')
+        : (fixes.length > 0 ? fixes.length + ' تصحيح' : 'نص سليم');
       pL.innerHTML = correctedHtml;
       
       // ربط زر النسخ (يحتاج query بعد الإدراج)
       const newCopyBtn = document.getElementById('copyBtn');
       if (newCopyBtn) {
+        const isEn=lang==='en';
         newCopyBtn.onclick = async function(){
           try {
             await navigator.clipboard.writeText(corrected);
-            newCopyBtn.textContent = '✅ تم النسخ';
-            setTimeout(() => { newCopyBtn.textContent = '📋 نسخ المصحح'; }, 2000);
+            newCopyBtn.textContent = isEn?'✅ Copied':'✅ تم النسخ';
+            setTimeout(() => { newCopyBtn.textContent = isEn?'📋 Copy corrected':'📋 نسخ المصحح'; }, 2000);
           } catch {
-            alert('اضغط Ctrl+C / ⌘C للنسخ');
+            alert(isEn?'Press Ctrl+C / ⌘C':'اضغط Ctrl+C / ⌘C للنسخ');
           }
         };
       }
       
     } catch(e) {
       pan.classList.add('show');
-      pT.textContent = '⚠️ خطأ';
+      const isEn=lang==='en';
+      pT.textContent = '⚠️ ' + (isEn?'Error':'خطأ');
       pC.textContent = '';
-      pL.innerHTML = '<div style="padding:20px;text-align:center;color:var(--error-text);">فشل الاتصال بالذكاء الاصطناعي. الرجاء المحاولة مرة أخرى.<br><small>' + esc(e.message) + '</small></div>';
+      pL.innerHTML = '<div style="padding:20px;text-align:center;color:var(--error-text);">' + (isEn?'Failed to connect to AI. Please try again.':'فشل الاتصال بالذكاء الاصطناعي. الرجاء المحاولة مرة أخرى.') + '<br><small>' + esc(e.message) + '</small></div>';
     }
     finally{
       go.disabled=false;
