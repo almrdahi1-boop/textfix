@@ -1,0 +1,24 @@
+{
+  "name": "textfix",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/almrdahi1-boop/textfix.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/almrdahi1-boop/textfix/issues"
+  },
+  "homepage": "https://github.com/almrdahi1-boop/textfix#readme",
+  "dependencies": {
+    "@vercel/node": "^5.7.15"
+  }
+}

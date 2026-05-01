@@ -94,34 +94,6 @@
   const lb=document.getElementById('loadBar'),tb=document.getElementById('themeBtn');
   let lang='ar';
 
-  // SYSTEM PROMPT للذكاء الاصطناعي
-  const SYSTEM_PROMPT = `أنت خبير تدقيق لغوي متخصص في اللغة العربية والإنجليزية. دورك تصحيح النصوص بدقة.
-
-مهامك:
-1. **التدقيق الإملائي والنحوي الشامل**: صحح الأخطاء الإملائية والنحوية. ركز على قواعد النحو العربي (الإعراب، علامات الرفع والنصب والجر، الأخطاء الشائعة).
-2. **إعادة صياغة منظمة**: أعد كتابة النص المصحح بطريقة مرتبة مع علامات الترقيم الصحيحة، الأحرف الكبيرة في بداية الجمل (للإنجليزية)، تنظيم الفقرات.
-3. **شرح التصحيحات**: اشرح ما الذي تم تصحيحه.
-
-**تنسيق الرد**: أعد JSON بهذه الصيغة بالضبط:
-{
-  "corrected": "النص الكامل بعد التصحيح وإعادة الصياغة",
-  "summary": "ملخص التغييرات (جملة أو جملتين)",
-  "fixes": [
-    {
-      "original": "الكلمة أو العبارة قبل التصحيح",
-      "corrected": "بعد التصحيح",
-      "explanation": "شرح الخطأ"
-    }
-  ],
-  "wordCount": عدد الكلمات,
-  "charCount": عدد الأحرف
-}
-
-مهم جداً:
-- لا تقم بتعديل الأرقام أو الأسماء أو التواريخ أو الروابط
-- حافظ على المعنى الأصلي للنص
-- أعد الرد بصيغة JSON صالحة فقط`;
-
   // Lang toggles
   document.querySelectorAll('.tool-btn[data-lang]').forEach(b=>{
     b.onclick=()=>{
@@ -164,25 +136,11 @@
     if(!text){pan.classList.remove('show');return}
     go.disabled=true;go.textContent='⏳...';lb.classList.add('show');pan.classList.remove('show');
     try{
-      // استخدم Gemini API مباشرة
-      const GEMINI_KEY = 'AIzaSyD4AKfbMUbG42zXrANC8dekD3XyPFnL1hQ';
-      const geminiBody = {
-        contents: [
-          { role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\n---\n\n' + text }] }
-        ],
-        generationConfig: {
-          temperature: 0.2,
-          topP: 0.9,
-          topK: 40,
-          maxOutputTokens: 8192,
-          responseMimeType: 'application/json'
-        }
-      };
-
-      const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_KEY, {
+      // استخدم API الوسيط على Vercel
+      const res = await fetch('/api/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(geminiBody)
+        body: JSON.stringify({ text })
       });
 
       if (!res.ok) {
@@ -191,27 +149,14 @@
       }
 
       const data = await res.json();
-      const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      
-      // استخراج JSON من الرد
-      let jsonStr = raw.trim();
-      if (jsonStr.startsWith('```')) {
-        jsonStr = jsonStr.replace(/```(?:json)?\n?/g, '').trim();
-      }
-      
-      let result;
-      try {
-        result = JSON.parse(jsonStr);
-      } catch {
-        // إذا فشل الـ JSON، نستخدم النص الخام
-        result = { corrected: raw, summary: 'تمت المعالجة', fixes: [], wordCount: 0, charCount: raw.length };
-      }
+      if (data.error) throw new Error(data.error);
+      const result = data;
       
       pan.classList.add('show');
       stats(text, result.fixes?.length || 0);
       
       const fixes = result.fixes || [];
-      const corrected = result.corrected || raw;
+      const corrected = result.corrected || '';
       
       // عرض النص المصحح
       let correctedHtml = '<div style="background:var(--bg);border-radius:8px;padding:16px;margin-bottom:16px;border:2px solid var(--success);">';
