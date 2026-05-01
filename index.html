@@ -55,10 +55,10 @@
 <header>
   <div class="logo">✏️ TextFix <span>تدقيق مجاني</span></div>
   <div class="toolbar">
-    <button class="tool-btn active" data-lang="auto">🌐 تلقائي</button>
-    <button class="tool-btn" id="themeBtn">🌙</button>
-    <button class="tool-btn" data-lang="ar">🇸🇦 العربية</button>
+    <button class="tool-btn active" data-lang="ar">🇸🇦 العربية</button>
     <button class="tool-btn" data-lang="en">🇬🇧 English</button>
+    <span style="width:1px;height:24px;background:var(--border);margin:0 4px;align-self:center"></span>
+    <button class="tool-btn" id="themeBtn">🌙</button>
   </div>
 </header>
 <main>
@@ -94,14 +94,42 @@
   const lb=document.getElementById('loadBar'),tb=document.getElementById('themeBtn');
   let lang='auto';
 
-  // Lang toggles — only toggle .active, never overwrite button text
+  // Lang toggles
   document.querySelectorAll('.tool-btn[data-lang]').forEach(b=>{
     b.onclick=()=>{
       document.querySelectorAll('.tool-btn[data-lang]').forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
       lang=b.dataset.lang;
+      updateLang(lang);
     }
   });
+
+  function updateLang(l){
+    const heroH=document.querySelector('.hero h1'),heroP=document.querySelector('.hero p');
+    if(l==='en'){
+      heroH.textContent='📝 Fix Your Text in Seconds';
+      heroP.textContent='Free spelling & grammar checker — Arabic & English';
+      document.querySelector('.logo span').textContent='Free Check';
+      document.querySelector('.hint').textContent='💡 Ctrl+Enter for quick check';
+      goBtn.textContent='🔍 Check';
+      clrBtn.textContent='🗑️ Clear';
+      pstBtn.textContent='📋 Paste';
+      document.querySelector('.stats span:nth-child(1)').innerHTML='📝 <strong id="wds">0</strong> words';
+      document.querySelector('.stats span:nth-child(2)').innerHTML='🔤 <strong id="chs">0</strong> chars';
+    } else {
+      heroH.textContent='📝 صحّح نصوصك في ثوانٍ';
+      heroP.textContent='تدقيق إملائي ونحوي مجاني — عربي وإنجليزي';
+      document.querySelector('.logo span').textContent='تدقيق مجاني';
+      document.querySelector('.hint').textContent='💡 Ctrl+Enter للتدقيق السريع';
+      goBtn.textContent='🔍 تدقيق';
+      clrBtn.textContent='🗑️ مسح';
+      pstBtn.textContent='📋 لصق';
+      document.querySelector('.stats span:nth-child(1)').innerHTML='📝 <strong id="wds">0</strong> كلمة';
+      document.querySelector('.stats span:nth-child(2)').innerHTML='🔤 <strong id="chs">0</strong> حرف';
+    }
+    wds=document.getElementById('wds');
+    chs=document.getElementById('chs');
+  }
 
   function stats(t,n){
     const v=t||txt.value;
