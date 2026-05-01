@@ -101,6 +101,10 @@
     .ctx em{background:#fef3c7;padding:0 2px;font-style:normal}
     footer{text-align:center;padding:24px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);margin-top:40px}
     .hint{text-align:center;padding:8px;font-size:12px;color:var(--text-muted)}
+    .seo-content{max-width:750px;margin:24px auto 0;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);font-size:15px;line-height:1.9}
+    .seo-content h2{font-size:18px;margin-bottom:12px;color:var(--text)}
+    .seo-content p{color:var(--text-muted);margin-bottom:12px}
+    .seo-content p:last-child{margin-bottom:0}
     body.dark{--primary:#60a5fa;--primary-dark:#3b82f6;--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--text-muted:#94a3b8;--border:#334155}
     body.dark .item{background:#1e293b}
     body.dark .ctx em{background:#3b2200}
@@ -138,6 +142,15 @@
     <div class="loading" id="loadBar"></div>
   </div>
   <div class="hint">💡 Ctrl+Enter للتدقيق السريع</div>
+  
+  <!-- SEO Content Section -->
+  <div class="seo-content" lang="ar">
+    <h2>📝 مدقق إملائي ونحوي مجاني | Free Arabic &amp; English Grammar Checker</h2>
+    <p>textfix.net هو مدقق إملائي ونحوي يعمل بالذكاء الاصطناعي لتصحيح الأخطاء الإملائية والقواعدية في النصوص العربية والإنجليزية. يوفر الموقع أيضًا أدوات تحويل الأحرف مثل <strong>تحويل النص إلى أحرف كبيرة (UPPERCASE)</strong>، <strong>جعل أول حرف من كل كلمة كبير (Title Case)</strong>، و <strong>جعل أول حرف من كل جملة كبير (Sentence Case)</strong>.</p>
+    <p>الموقع مثالي للكتاب والطلاب والمحررين الذين يحتاجون إلى <strong>تدقيق نحوي دقيق</strong> و <strong>تصحيح إملائي سريع</strong> دون الحاجة لبرامج مدفوعة. كل الخدمات مجانية بالكامل.</p>
+    <p lang="en" style="direction:ltr;text-align:left">textfix.net is a free AI-powered spelling and grammar checker supporting Arabic and English. Fix typos, capitalization, and grammar errors instantly. Includes UPPERCASE, Title Case, and Sentence Case converters. Fast, private, and free.</p>
+  </div>
+  
   <div class="panel" id="panel">
     <h3><span id="pTitle">نتائج التدقيق</span><span id="pCount"></span></h3>
     <div class="list" id="pList"></div>
