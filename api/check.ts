@@ -1,18 +1,16 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const SYSTEM_PROMPT_AR = (caps: number) => {
-  let rule = '';
-  if (caps === 1) rule = '4. **تحويل جميع الحروف إلى كبيرة**: اجعل النص كله بأحرف كبيرة (UPPERCASE).';
-  else if (caps === 2) rule = '4. **أول حرف من كل كلمة كبير**: اجعل أول حرف من كل كلمة كبيراً (Title Case، مثل العناوين).';
-  else if (caps === 3) rule = '4. **أول حرف من كل جملة كبير**: اجعل أول حرف من كل جملة كبيراً فقط (Sentence case).';
-  const r = rule ? `\n${rule}` : '';
+  let capRule = '';
+  if (caps === 1) capRule = '\n4. **تحويل جميع الحروف إلى كبيرة**: اجعل النص كله بأحرف كبيرة (UPPERCASE).';
+  else if (caps === 2) capRule = '\n4. **أول حرف من كل كلمة كبير**: اجعل أول حرف من كل كلمة كبيراً (Title Case، مثل العناوين).';
+  else if (caps === 3) capRule = '\n4. **أول حرف من كل جملة كبير**: اجعل أول حرف من كل جملة كبيراً فقط (Sentence case).';
   return `أنت خبير تدقيق لغوي متخصص في اللغة العربية والإنجليزية. دورك تصحيح النصوص بدقة.
 
 مهامك:
 1. **التدقيق الإملائي والنحوي الشامل**: صحح الأخطاء الإملائية والنحوية
 2. **إعادة صياغة منظمة**: أعد كتابة النص المصحح مع علامات الترقيم الصحيحة والأحرف الكبيرة
-3. **شرح التصحيحات**: اشرح ما الذي تم تصحيحه
-${r}
+3. **شرح التصحيحات**: اشرح ما الذي تم تصحيحه${capRule}
 **تنسيق الرد**: JSON فقط:
 {
   "corrected": "النص الكامل بعد التصحيح",
@@ -26,18 +24,16 @@ ${r}
 };
 
 const SYSTEM_PROMPT_EN = (caps: number) => {
-  let rule = '';
-  if (caps === 1) rule = '4. **Convert all letters to UPPERCASE**: Rewrite the entire text in uppercase.';
-  else if (caps === 2) rule = '4. **Capitalize each word**: Rewrite in Title Case (first letter of every word capitalized).';
-  else if (caps === 3) rule = '4. **Sentence case**: Capitalize only the first letter of each sentence.';
-  const r = rule ? `\n${r}` : '';
+  let capRule = '';
+  if (caps === 1) capRule = '\n4. **Convert all letters to UPPERCASE**: Rewrite the entire text in uppercase.';
+  else if (caps === 2) capRule = '\n4. **Capitalize each word**: Rewrite in Title Case (first letter of every word capitalized).';
+  else if (caps === 3) capRule = '\n4. **Sentence case**: Capitalize only the first letter of each sentence.';
   return `You are a professional proofreading expert specializing in Arabic and English. Correct text accurately.
 
 Tasks:
 1. **Spelling & Grammar Check**: Fix all errors
 2. **Clean Rewrite**: Rewrite with proper punctuation and capitalization
-3. **Explain Fixes**: Explain what was corrected
-${r}
+3. **Explain Fixes**: Explain what was corrected${capRule}
 **Response format**: JSON only:
 {
   "corrected": "Full corrected text",
@@ -60,7 +56,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'No text provided' });
   }
 
-  // caps: 0=no change, 1=UPPERCASE, 2=Title Case, 3=Sentence case
   const capsMode = typeof caps === 'number' && caps >= 1 && caps <= 3 ? caps : 0;
 
   const isArabic = /[\u0600-\u06FF]/.test(text);
