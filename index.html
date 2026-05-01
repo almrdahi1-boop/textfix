@@ -99,6 +99,9 @@
     b.onclick=()=>{
       document.querySelectorAll('.tool-btn[data-lang]').forEach(x=>x.classList.remove('active'));
       b.classList.add('active');lang=b.dataset.lang;
+      // Visual feedback: update subtitle
+      const labels={'auto':'🌐 تلقائي','ar':'🇸🇦 العربية','en':'🇬🇧 English'};
+      document.querySelector('.tool-btn[data-lang="'+lang+'"]').textContent=labels[lang];
     }
   });
 
