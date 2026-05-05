@@ -172,12 +172,14 @@
     <a href="https://wa.me/?text=📝+textfix.net+-+مدقق+إملائي+ونحوي+مجاني:+https://textfix.net" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'whatsapp'})">💬 واتساب</a>
     <a href="https://t.me/share/url?url=https://textfix.net&text=📝 مدقق إملائي ونحوي مجاني بالذكاء الاصطناعي" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'telegram'})">✈️ تليجرام</a>
   </div>
-  <div id="visitorBadge" style="margin-bottom:8px"></div>
+  <div id="visitorBadge" style="margin-bottom:8px;font-size:14px;color:var(--text-muted)">👁️ تحميل الإحصائيات...</div>
   textfix.net &copy; 2026 — <a href="#">سياسة الخصوصية</a> | <a href="#">تواصل معنا</a> | <a href="#">شروط الاستخدام</a>
 </footer>
 <script>
-fetch('https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Ftextfix.net&label=الزوار&countColor=%232563eb&style=flat&labelStyle=lower&countJSON&nocache='+Date.now())
-  .then(r=>r.json()).then(d=>{document.getElementById('visitorBadge').innerHTML='👁️ <strong>'+d.count+'</strong> زائر'}).catch(()=>{})
+fetch('https://api.countapi.xyz/hit/textfix.net/visitors')
+  .then(r=>r.json()).then(d=>{document.getElementById('visitorBadge').innerHTML='👁️ <strong>'+d.value+'</strong> زائر'}).catch(()=>{
+    document.getElementById('visitorBadge').innerHTML='👁️ زائر واحد';
+  })
 </script>
 <script>
 (function(){
