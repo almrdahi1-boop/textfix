@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>textfix.net - تدقيق إملائي ونحوي بالذكاء الاصطناعي | AI Arabic &amp; English Spelling &amp; Grammar Checker</title>
+  <meta name="description" content="أداة مجانية للتدقيق الإملائي والنحوي بالذكاء الاصطناعي. صحح نصوصك العربية والإنجليزية، مع خيارات تحويل الأحرف (Capitalize, UPPERCASE, Title Case). Free AI grammar &amp; spell checker.">
+  <meta name="keywords" content="تدقيق إملائي, تدقيق نحوي, تصحيح نصوص, مدقق إملائي, مدقق نحوي, تصحيح إنجليزي, مدقق عربي, grammar checker, spell checker, AI text fix, free grammar checker, text correction, capitalizer">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="textfix.net">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="color-scheme" content="light dark">
+  <link rel="canonical" href="https://textfix.net/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://textfix-bice.vercel.app">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="textfix.net - مدقق إملائي ونحوي مجاني بالذكاء الاصطناعي">
+  <meta property="og:description" content="أداة مجانية للتدقيق الإملائي والنحوي. صحح نصوصك العربية والإنجليزية مع خيارات تحويل الأحرف.">
+  <meta property="og:url" content="https://textfix.net/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar_SA">
+  <meta property="og:site_name" content="textfix.net">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="textfix.net - مدقق إملائي ونحوي مجاني بالذكاء الاصطناعي">
+  <meta name="twitter:description" content="أداة مجانية للتدقيق الإملائي والنحوي. صحح نصوصك العربية والإنجليزية.">
+  
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="ar" href="https://textfix.net/">
+  <link rel="alternate" hreflang="en" href="https://textfix.net/">
+  <link rel="alternate" hreflang="x-default" href="https://textfix.net/">
+  
+  <!-- JSON-LD Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "textfix.net",
+    "url": "https://textfix.net/",
+    "description": "أداة مجانية للتدقيق الإملائي والنحوي بالذكاء الاصطناعي للعربية والإنجليزية",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Modern browser with JavaScript",
+    "inLanguage": ["ar", "en"],
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RK24YEQWXN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RK24YEQWXN');
+  </script>
+  
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--primary:#2563eb;--primary-dark:#1d4ed8;--bg:#f8fafc;--card:#fff;--text:#1e293b;--text-muted:#64748b;--border:#e2e8f0;--error-text:#dc2626;--success:#16a34a;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08)}
+    body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+    header{background:var(--card);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+    .logo{font-size:24px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:8px}
+    .logo span{font-size:14px;font-weight:400;color:var(--text-muted)}
+    .toolbar{display:flex;gap:6px;background:var(--bg);border-radius:8px;padding:3px}
+    .tool-btn{border:none;background:transparent;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;color:var(--text-muted);transition:all .15s}
+    .tool-btn.active,.tool-btn:hover{background:var(--primary);color:#fff}
+    main{max-width:900px;margin:0 auto;padding:32px 20px;flex:1;width:100%}
+    .hero{text-align:center;margin-bottom:24px}
+    .hero h1{font-size:28px;margin-bottom:8px}
+    .hero p{color:var(--text-muted)}
+    .stats{display:flex;gap:24px;justify-content:center;margin-bottom:20px;font-size:14px;color:var(--text-muted);flex-wrap:wrap}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+    .actions{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg);flex-wrap:wrap}
+    .btn{border:1px solid var(--border);background:var(--card);padding:8px 18px;border-radius:6px;cursor:pointer;font-size:14px;color:var(--text);transition:all .15s}
+    .btn:hover,.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .btn.primary:hover{background:var(--primary-dark)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    textarea{width:100%;min-height:280px;padding:20px;border:none;font-size:16px;line-height:1.8;resize:vertical;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--text);background:transparent}
+    textarea:focus{outline:none}
+    textarea::placeholder{color:#94a3b8}
+    .loading{display:none;height:3px;background:linear-gradient(90deg,var(--primary),#818cf8);animation:load 1s infinite}
+    @keyframes load{0%{width:0}50%{width:50%}100%{width:100%}}
+    .loading.show{display:block}
+    .panel{display:none;margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+    .panel.show{display:block}
+    .panel h3{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+    .panel h3 span:last-child{font-size:14px;color:var(--text-muted);font-weight:400}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;background:var(--bg);border-right:3px solid var(--error-text)}
+    .item .msg{flex:1;font-size:14px}
+    .item .msg b{display:block;margin-bottom:2px}
+    .old{color:var(--error-text);text-decoration:line-through}
+    .new{color:var(--success);font-weight:600}
+    .ctx{font-size:12px;color:var(--text-muted);margin-top:4px;opacity:.7}
+    .ctx em{background:#fef3c7;padding:0 2px;font-style:normal}
+    footer{text-align:center;padding:24px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);margin-top:40px}
+    .hint{text-align:center;padding:8px;font-size:12px;color:var(--text-muted)}
+    .seo-content{max-width:750px;margin:24px auto 0;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);font-size:15px;line-height:1.9}
+    .seo-content h2{font-size:18px;margin-bottom:12px;color:var(--text)}
+    .seo-content p{color:var(--text-muted);margin-bottom:12px}
+    .seo-content p:last-child{margin-bottom:0}
+    body.dark{--primary:#60a5fa;--primary-dark:#3b82f6;--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--text-muted:#94a3b8;--border:#334155}
+    body.dark .item{background:#1e293b}
+    body.dark .ctx em{background:#3b2200}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">✏️ textfix.net <span>تدقيق مجاني</span></div>
+  <div class="toolbar">
+    <button class="tool-btn active" data-lang="ar">🇸🇦 العربية</button>
+    <button class="tool-btn" data-lang="en">🇬🇧 English</button>
+    <span style="width:1px;height:24px;background:var(--border);margin:0 4px;align-self:center"></span>
+    <button class="tool-btn" id="themeBtn">🌙</button>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <h1>📝 صحّح نصوصك في ثوانٍ</h1>
+    <p>تدقيق إملائي ونحوي مجاني — عربي وإنجليزي</p>
+  </section>
+  <div class="stats"><span>📝 <strong id="wds">0</strong> كلمة</span><span>🔤 <strong id="chs">0</strong> حرف</span><span id="errStat" style="display:none">⚠️ <strong id="errs">0</strong> خطأ</span></div>
+  <div class="card">
+    <div class="actions">
+      <button class="btn primary" id="goBtn">🔍 تدقيق</button>
+      <select id="capsSelect" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:14px;cursor:pointer">
+        <option value="0">بدون تغيير</option>
+        <option value="1">🔠 أحرف كبيرة</option>
+        <option value="2">👤 أول حرف من كل كلمة</option>
+        <option value="3">📖 أول حرف من كل جملة</option>
+      </select>
+      <button class="btn" id="clrBtn">🗑️ مسح</button>
+      <button class="btn" id="pstBtn">📋 لصق</button>
+    </div>
+    <textarea id="txt" dir="auto" placeholder="اكتب أو الصق نصك هنا..." spellcheck="false"></textarea>
+    <div class="loading" id="loadBar"></div>
+  </div>
+  <div class="hint">💡 Ctrl+Enter للتدقيق السريع</div>
+  
+  <!-- SEO Content Section -->
+  <div class="seo-content" lang="ar">
+    <h2>📝 مدقق إملائي ونحوي مجاني | Free Arabic &amp; English Grammar Checker</h2>
+    <p>textfix.net هو مدقق إملائي ونحوي يعمل بالذكاء الاصطناعي لتصحيح الأخطاء الإملائية والقواعدية في النصوص العربية والإنجليزية. يوفر الموقع أيضًا أدوات تحويل الأحرف مثل <strong>تحويل النص إلى أحرف كبيرة (UPPERCASE)</strong>، <strong>جعل أول حرف من كل كلمة كبير (Title Case)</strong>، و <strong>جعل أول حرف من كل جملة كبير (Sentence Case)</strong>.</p>
+    <p>الموقع مثالي للكتاب والطلاب والمحررين الذين يحتاجون إلى <strong>تدقيق نحوي دقيق</strong> و <strong>تصحيح إملائي سريع</strong> دون الحاجة لبرامج مدفوعة. كل الخدمات مجانية بالكامل.</p>
+    <p lang="en" style="direction:ltr;text-align:left">textfix.net is a free AI-powered spelling and grammar checker supporting Arabic and English. Fix typos, capitalization, and grammar errors instantly. Includes UPPERCASE, Title Case, and Sentence Case converters. Fast, private, and free.</p>
+  </div>
+  
+  <div class="panel" id="panel">
+    <h3><span id="pTitle">نتائج التدقيق</span><span id="pCount"></span></h3>
+    <div class="list" id="pList"></div>
+  </div>
+</main>
+<footer>
+  <div style="margin-bottom:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <a href="https://twitter.com/intent/tweet?text=📝+textfix.net+-+مدقق+إملائي+ونحوي+مجاني+بالذكاء+الاصطناعي&url=https://textfix.net" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'twitter'})">🐦 مشاركة</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://textfix.net" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'facebook'})">📘 فيسبوك</a>
+    <a href="https://wa.me/?text=📝+textfix.net+-+مدقق+إملائي+ونحوي+مجاني:+https://textfix.net" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'whatsapp'})">💬 واتساب</a>
+    <a href="https://t.me/share/url?url=https://textfix.net&text=📝 مدقق إملائي ونحوي مجاني بالذكاء الاصطناعي" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'telegram'})">✈️ تليجرام</a>
+  </div>
+  textfix.net &copy; 2026 — <a href="#">سياسة الخصوصية</a> | <a href="#">تواصل معنا</a> | <a href="#">شروط الاستخدام</a>
+</footer>
+<script>
+(function(){
+  const txt=document.getElementById('txt'),go=document.getElementById('goBtn');
+  const clr=document.getElementById('clrBtn'),pst=document.getElementById('pstBtn');
+  const pan=document.getElementById('panel'),pL=document.getElementById('pList');
+  const pC=document.getElementById('pCount'),pT=document.getElementById('pTitle');
+  const wds=document.getElementById('wds'),chs=document.getElementById('chs');
+  const ers=document.getElementById('errs'),eS=document.getElementById('errStat');
+  const lb=document.getElementById('loadBar'),tb=document.getElementById('themeBtn');
+  let lang='ar';
+
+  // Lang toggles
+  document.querySelectorAll('.tool-btn[data-lang]').forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll('.tool-btn[data-lang]').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      lang=b.dataset.lang;
+      updateLang(lang);
+    }
+  });
+
+  function updateLang(l){
+    const heroH=document.querySelector('.hero h1'),heroP=document.querySelector('.hero p');
+    const capsSel=document.getElementById('capsSelect');
+    const isEn=l==='en';
+    capsSel.options[0].text=isEn?'No Change':'بدون تغيير';
+    capsSel.options[1].text=isEn?'🔠 UPPERCASE':'🔠 أحرف كبيرة';
+    capsSel.options[2].text=isEn?'👤 Title Case':'👤 أول حرف من كل كلمة';
+    capsSel.options[3].text=isEn?'📖 Sentence case':'📖 أول حرف من كل جملة';
+    heroH.textContent=isEn?'📝 Fix Your Text in Seconds':'📝 صحّح نصوصك في ثوانٍ';
+    heroP.textContent=isEn?'Free spelling & grammar checker — Arabic & English':'تدقيق إملائي ونحوي مجاني — عربي وإنجليزي';
+    document.querySelector('.logo span').textContent=isEn?'Free Check':'تدقيق مجاني';
+    document.querySelector('.hint').textContent=isEn?'💡 Ctrl+Enter for quick check':'💡 Ctrl+Enter للتدقيق السريع';
+    go.textContent=isEn?'🔍 Check':'🔍 تدقيق';
+    clr.textContent=isEn?'🗑️ Clear':'🗑️ مسح';
+    pst.textContent=isEn?'📋 Paste':'📋 لصق';
+
+    document.querySelector('.stats span:nth-child(1)').innerHTML=isEn?'📝 <strong id="wds">0</strong> words':'📝 <strong id="wds">0</strong> كلمة';
+    document.querySelector('.stats span:nth-child(2)').innerHTML=isEn?'🔤 <strong id="chs">0</strong> chars':'🔤 <strong id="chs">0</strong> حرف';
+    wds=document.getElementById('wds');
+    chs=document.getElementById('chs');
+  }
+
+  function stats(t,n){
+    const v=t||txt.value;
+    wds.textContent=v.trim()?v.trim().split(/\s+/).length:0;
+    chs.textContent=v.length;
+    if(n!==undefined){ers.textContent=n;eS.style.display=n>0?'inline':'none'}
+    else eS.style.display='none';
+  }
+
+  function esc(s){return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''}
+
+  async function check(){
+    const text=txt.value.trim();
+    if(!text){pan.classList.remove('show');return}
+    go.disabled=true;go.textContent='⏳...';lb.classList.add('show');pan.classList.remove('show');
+    try{
+      const capsMode = parseInt(document.getElementById('capsSelect').value);
+      const res = await fetch('/api/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, caps: capsMode })
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error('API error: ' + errText.slice(0, 200));
+      }
+
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      const result = data;
+      
+      pan.classList.add('show');
+      stats(text, result.fixes?.length || 0);
+      
+      const fixes = result.fixes || [];
+      const corrected = result.corrected || '';
+      const isEn=lang==='en';
+      
+      let correctedHtml = '<div style="background:var(--bg);border-radius:8px;padding:16px;margin-bottom:16px;border:2px solid var(--success);">';
+      correctedHtml += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+      correctedHtml += '<span style="font-weight:600;color:var(--success);">' + (isEn?'✅ Corrected Text':'✅ النص بعد التصحيح') + '</span>';
+      correctedHtml += '<button class="btn" id="copyBtn" style="font-size:13px;padding:4px 12px;">' + (isEn?'📋 Copy corrected':'📋 نسخ المصحح') + '</button>';
+      correctedHtml += '</div>';
+      correctedHtml += '<div style="font-size:15px;line-height:1.8;white-space:pre-wrap;">' + esc(corrected) + '</div></div>';
+      
+      if (result.summary) {
+        correctedHtml += '<div style="padding:12px;background:var(--bg);border-radius:8px;margin-bottom:16px;">';
+        correctedHtml += '<span style="color:var(--text-muted);font-size:13px;">📌 ' + esc(result.summary) + '</span></div>';
+      }
+      
+      if (fixes.length > 0) {
+        correctedHtml += '<div style="margin-top:8px;"><h4 style="margin-bottom:12px;font-size:14px;color:var(--text-muted);">' + (isEn?'🔧 Fix Details':'🔧 تفاصيل التصحيحات') + '</h4>';
+        for (const f of fixes) {
+          correctedHtml += '<div class="item">';
+          correctedHtml += '<span>✏️</span>';
+          correctedHtml += '<div class="msg"><b>' + esc(f.explanation || (isEn?'Fix':'تصحيح')) + '</b>';
+          correctedHtml += '<span class="old">' + esc(f.original) + '</span>';
+          correctedHtml += ' <span class="new">← ' + esc(f.corrected) + '</span>';
+          correctedHtml += '</div></div>';
+        }
+      }
+      
+      pT.textContent = isEn
+        ? (fixes.length > 0 ? '📝 Check Results' : '✅ All Good')
+        : (fixes.length > 0 ? '📝 نتائج التدقيق' : '✅ التدقيق كامل');
+      pC.textContent = isEn
+        ? (fixes.length > 0 ? fixes.length + ' fix' + (fixes.length>1?'es':'') : 'Clean text')
+        : (fixes.length > 0 ? fixes.length + ' تصحيح' : 'نص سليم');
+      pL.innerHTML = correctedHtml;
+      
+      // ربط زر النسخ (يحتاج query بعد الإدراج)
+      const newCopyBtn = document.getElementById('copyBtn');
+      if (newCopyBtn) {
+        const isEn=lang==='en';
+        newCopyBtn.onclick = async function(){
+          try {
+            await navigator.clipboard.writeText(corrected);
+            newCopyBtn.textContent = isEn?'✅ Copied':'✅ تم النسخ';
+            setTimeout(() => { newCopyBtn.textContent = isEn?'📋 Copy corrected':'📋 نسخ المصحح'; }, 2000);
+          } catch {
+            alert(isEn?'Press Ctrl+C / ⌘C':'اضغط Ctrl+C / ⌘C للنسخ');
+          }
+        };
+      }
+      
+    } catch(e) {
+      pan.classList.add('show');
+      const isEn=lang==='en';
+      pT.textContent = '⚠️ ' + (isEn?'Error':'خطأ');
+      pC.textContent = '';
+      pL.innerHTML = '<div style="padding:20px;text-align:center;color:var(--error-text);">' + (isEn?'Failed to connect to AI. Please try again.':'فشل الاتصال بالذكاء الاصطناعي. الرجاء المحاولة مرة أخرى.') + '<br><small>' + esc(e.message) + '</small></div>';
+    }
+    finally{
+      go.disabled=false;
+      go.textContent='🔍 تدقيق';
+      lb.classList.remove('show');
+    }
+  }
+
+  go.onclick=check;
+  clr.onclick=()=>{txt.value='';pan.classList.remove('show');stats('',0);txt.focus()};
+  pst.onclick=async()=>{try{const t=await navigator.clipboard.readText();txt.value=t;pan.classList.remove('show');stats(t,0)}catch{alert('استخدم Ctrl+V / ⌘V.')}};
+  txt.oninput=()=>{stats(txt.value,0);pan.classList.remove('show')};
+  txt.onkeydown=e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();check()}};
+
+  // Dark mode
+  function setDark(d){document.body.classList.toggle('dark',d);tb.textContent=d?'☀️':'🌙';localStorage.setItem('tf-d',d?'1':'0')}
+  const sv=localStorage.getItem('tf-d');sv?setDark(sv==='1'):setDark(window.matchMedia('(prefers-color-scheme:dark)').matches);
+  tb.onclick=()=>setDark(!document.body.classList.contains('dark'));
+  stats('',0);
+})();
+</script>
+</body>
+</html>
