@@ -60,10 +60,14 @@
     gtag('js', new Date());
     gtag('config', 'G-RK24YEQWXN');
   </script>
+  <!-- Vercel Insights + Google Analytics -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Simple visitor counter -->
+  <script defer src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Ftextfix.net&label=الزوار&countColor=%232563eb&style=flat&labelStyle=lower" crossorigin></script>
   
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -168,8 +172,13 @@
     <a href="https://wa.me/?text=📝+textfix.net+-+مدقق+إملائي+ونحوي+مجاني:+https://textfix.net" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'whatsapp'})">💬 واتساب</a>
     <a href="https://t.me/share/url?url=https://textfix.net&text=📝 مدقق إملائي ونحوي مجاني بالذكاء الاصطناعي" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'telegram'})">✈️ تليجرام</a>
   </div>
+  <div id="visitorBadge" style="margin-bottom:8px"></div>
   textfix.net &copy; 2026 — <a href="#">سياسة الخصوصية</a> | <a href="#">تواصل معنا</a> | <a href="#">شروط الاستخدام</a>
 </footer>
+<script>
+fetch('https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Ftextfix.net&label=الزوار&countColor=%232563eb&style=flat&labelStyle=lower&countJSON&nocache='+Date.now())
+  .then(r=>r.json()).then(d=>{document.getElementById('visitorBadge').innerHTML='👁️ <strong>'+d.count+'</strong> زائر'}).catch(()=>{})
+</script>
 <script>
 (function(){
   const txt=document.getElementById('txt'),go=document.getElementById('goBtn');
