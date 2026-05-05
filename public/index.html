@@ -13,6 +13,7 @@
   <link rel="canonical" href="https://textfix.net/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://textfix-bice.vercel.app">
+  <meta name="google-site-verification" content="P5yCiLjGxk6gijSOFEOghM6e9r2fwVcFVmP9WjkCMvw" />
   
   <!-- Open Graph -->
   <meta property="og:title" content="textfix.net - مدقق إملائي ونحوي مجاني بالذكاء الاصطناعي">
@@ -51,6 +52,54 @@
     }
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "ما هو textfix.net؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "textfix.net هو مدقق إملائي ونحوي مجاني يستخدم الذكاء الاصطناعي لتصحيح الأخطاء في النصوص العربية والإنجليزية."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "هل textfix.net مجاني؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم، textfix.net مجاني بالكامل ولا يتطلب أي اشتراك أو دفع."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "هل يدعم textfix.net اللغة العربية؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم، يدعم الموقع اللغة العربية والإنجليزية بشكل كامل."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "كيف أستخدم textfix.net لتصحيح النصوص؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "الصق النص في المربع المخصص واضغط على زر 'تدقيق'. سيصحح الذكاء الاصطناعي الأخطاء الإملائية والنحوية فوراً."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "هل textfix.net يحافظ على خصوصية نصوصي؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "نعم، الموقع لا يخزن نصوصك. ترسل النصوص للذكاء الاصطناعي للتدقيق فقط ولا تُحفظ."
+        }
+      }
+    ]
+  }
+  </script>
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-RK24YEQWXN"></script>
@@ -60,15 +109,9 @@
     gtag('js', new Date());
     gtag('config', 'G-RK24YEQWXN');
   </script>
-  <!-- Vercel Insights + Google Analytics -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
+  <!-- Vercel Insights -->
   <script defer src="/_vercel/insights/script.js"></script>
 
-  <!-- Simple visitor counter -->
-  <script defer src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Ftextfix.net&label=الزوار&countColor=%232563eb&style=flat&labelStyle=lower" crossorigin></script>
-  
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--primary:#2563eb;--primary-dark:#1d4ed8;--bg:#f8fafc;--card:#fff;--text:#1e293b;--text-muted:#64748b;--border:#e2e8f0;--error-text:#dc2626;--success:#16a34a;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08)}
@@ -173,8 +216,13 @@
     <a href="https://t.me/share/url?url=https://textfix.net&text=📝 مدقق إملائي ونحوي مجاني بالذكاء الاصطناعي" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-muted);font-size:13px" onclick="gtag('event','share',{method:'telegram'})">✈️ تليجرام</a>
   </div>
   <div id="visitorBadge" style="margin-bottom:8px">
-    <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Ftextfix.net&label=الزوار&countColor=%232563eb&style=flat&labelStyle=lower" alt="الزوار" />
+    👁️ <span id="visitorCount">0</span> زائر
   </div>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    fetch('https://api.countapi.xyz/hit/textfix.net/visitors').then(r=>r.json()).then(d=>{document.getElementById('visitorCount').textContent=d.value}).catch(()=>{});
+    fetch('https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Ftextfix.net&label=الزوار&countColor=%232563eb&style=flat&labelStyle=lower').catch(()=>{});
+  </script>
   textfix.net &copy; 2026 — <a href="#">سياسة الخصوصية</a> | <a href="#">تواصل معنا</a> | <a href="#">شروط الاستخدام</a>
 </footer>
 <script>
