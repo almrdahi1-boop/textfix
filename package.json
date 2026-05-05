@@ -1,10 +1,9 @@
 {
   "name": "textfix",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "AI Arabic & English Grammar Checker",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "echo 'Static site - no build needed'"
   },
   "repository": {
     "type": "git",
@@ -13,7 +12,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/almrdahi1-boop/textfix/issues"
   },
